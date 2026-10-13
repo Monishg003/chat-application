@@ -1,0 +1,236 @@
+{
+  "info": {
+    "name": "Chat Application",
+    "description": "Postman collection for the Redis-backed Spring Boot chat APIs.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Chat Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"roomName\": \"general\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Join Chat Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participant\": \"guest_user\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general/join",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general",
+            "join"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send Message",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participant\": \"guest_user\",\n  \"message\": \"Hello, everyone!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general/messages",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general",
+            "messages"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Retrieve Chat History",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general/messages?limit=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general",
+            "messages"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get Chat Room",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general"
+          ]
+        }
+      }
+    },
+    {
+      "name": "List Chat Rooms",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Subscribe Real-Time Stream",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "text/event-stream"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general/stream",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general",
+            "stream"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Chat Room",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/general",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "general"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Send Message To Missing Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"participant\": \"guest_user\",\n  \"message\": \"Hello, everyone!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/chatapp/chatrooms/missing/messages",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "chatapp",
+            "chatrooms",
+            "missing",
+            "messages"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    }
+  ]
+}
