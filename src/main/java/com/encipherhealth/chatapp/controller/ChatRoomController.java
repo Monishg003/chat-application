@@ -36,7 +36,6 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RestController
 @RequestMapping("/api/chatapp/chatrooms")
-@Tag(name = "Chat Rooms")
 public class ChatRoomController
 {
     private static final long SSE_TIMEOUT_MS = TimeUnit.HOURS.toMillis(1);
