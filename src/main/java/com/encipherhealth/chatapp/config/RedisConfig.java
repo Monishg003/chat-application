@@ -11,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import io.lettuce.core.RedisURI;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,15 +40,34 @@ public class RedisConfig
     public RedisConnectionFactory redisConnectionFactory()
     {
         RedisStandaloneConfiguration standaloneConfig = new RedisStandaloneConfiguration();
-        standaloneConfig.setHostName(redisProperties.getHost());
-        standaloneConfig.setPort(redisProperties.getPort());
-        standaloneConfig.setDatabase(redisProperties.getDatabase());
+        LettuceClientConfiguration.LettuceClientConfigurationBuilder clientConfig = LettuceClientConfiguration.builder();
 
-        if (redisProperties.getPassword() != null) {
-            standaloneConfig.setPassword(redisProperties.getPassword());
+        if (redisProperties.getUrl() != null && !redisProperties.getUrl().isBlank()) {
+            RedisURI redisUri = RedisURI.create(redisProperties.getUrl());
+            standaloneConfig.setHostName(redisUri.getHost());
+            standaloneConfig.setPort(redisUri.getPort());
+            standaloneConfig.setDatabase(redisUri.getDatabase());
+            if (redisUri.getUsername() != null && !redisUri.getUsername().isBlank()) {
+                standaloneConfig.setUsername(redisUri.getUsername());
+            }
+            if (redisUri.getPassword() != null && redisUri.getPassword().length > 0) {
+                standaloneConfig.setPassword(new String(redisUri.getPassword()));
+            }
+            if (redisUri.isSsl()) {
+                clientConfig.useSsl();
+            }
+        }
+        else {
+            standaloneConfig.setHostName(redisProperties.getHost());
+            standaloneConfig.setPort(redisProperties.getPort());
+            standaloneConfig.setDatabase(redisProperties.getDatabase());
+            if (redisProperties.getPassword() != null && !redisProperties.getPassword().isBlank()) {
+                standaloneConfig.setPassword(redisProperties.getPassword());
+            }
         }
 
-        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(standaloneConfig);
+        LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory(
+                standaloneConfig, clientConfig.build());
         lettuceConnectionFactory.afterPropertiesSet();
         return lettuceConnectionFactory;
     }

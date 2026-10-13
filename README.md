@@ -32,13 +32,26 @@ The service listens on `http://localhost:8080`.
 - Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 - OpenAPI JSON: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
 
+## Deploy on Render
+
+Create a **Web Service** with Docker and set the root directory to `chat_application`. Render uses `Dockerfile`.
+
+Also create a Render **Redis** instance and add this environment variable on the web service:
+
+| Key | Value |
+| --- | --- |
+| `REDIS_URL` | Internal Redis URL from the Render Redis instance |
+
+Health check path: `/actuator/health`
+
 ## Configuration
 
 `src/main/resources/application.properties`
 
 | Property | Default | Purpose |
 | --- | --- | --- |
-| `server.port` | `8080` | HTTP port |
+| `server.port` | `PORT` or `8080` | HTTP port (Render sets `PORT`) |
+| `spring.data.redis.url` | `REDIS_URL` | Redis URL, used on Render |
 | `spring.data.redis.host` | `localhost` | Redis host |
 | `spring.data.redis.port` | `6379` | Redis port |
 | `spring.data.redis.database` | `0` | Redis database index |
